@@ -1,0 +1,6 @@
+{
+  "name": "Laboratorio Schvarzstein - Análisis Clínicos",
+  "description": "App móvil de análisis clínicos y perfiles bioquímicos de Laboratorio Schvarzstein en Calle Sarmiento 902, Paso de los Libres, Corrientes, Argentina.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
