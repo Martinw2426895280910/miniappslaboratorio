@@ -4,10 +4,7 @@ import {
   Search, 
   FileText, 
   Download, 
-  CheckCircle, 
-  AlertTriangle, 
   ShieldCheck, 
-  Printer, 
   User, 
   Building2 
 } from 'lucide-react';
@@ -32,7 +29,6 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
 }) => {
   const [protocolInput, setProtocolInput] = useState('');
   const [dniInput, setDniInput] = useState('');
-  const [loadedReport, setLoadedReport] = useState<boolean>(false);
   const [reportState, setReportState] = useState<'idle' | 'loading' | 'found' | 'error'>('idle');
 
   if (!isOpen) return null;
@@ -42,7 +38,6 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
     setReportState('loading');
     setTimeout(() => {
       setReportState('found');
-      setLoadedReport(true);
     }, 700);
   };
 
@@ -52,8 +47,14 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
     setReportState('loading');
     setTimeout(() => {
       setReportState('found');
-      setLoadedReport(true);
     }, 500);
+  };
+
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadPdf = () => {
+    setIsDownloading(true);
+    setTimeout(() => setIsDownloading(false), 2500);
   };
 
   const mockReportResults: { category: string; rows: TestResultRow[] }[] = [
@@ -92,51 +93,53 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl max-h-[92vh] overflow-y-auto no-scrollbar flex flex-col shadow-2xl relative"
+        className="w-full max-w-xl bg-slate-900 border-2 border-slate-700 rounded-t-3xl sm:rounded-3xl max-h-[92vh] overflow-y-auto no-scrollbar flex flex-col shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900/95 backdrop-blur-md z-10">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800">
-              <FileText className="w-4 h-4" />
+        <div className="p-5 border-b-2 border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900/98 backdrop-blur-md z-10">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-emerald-950 text-emerald-400 border border-emerald-800">
+              <FileText className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white font-display">
+              <h3 className="text-lg font-black text-white font-display uppercase tracking-wide">
                 Portal de Resultados Online
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs font-bold text-slate-400">
                 Laboratorio Schvarzstein · Paso de los Libres
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 transition-colors"
+            className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-slate-700 transition-colors"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Search Input Section */}
-        <div className="p-4 sm:p-5 space-y-4 text-xs">
-          <form onSubmit={handleSearch} className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+        <div className="p-5 space-y-4 text-xs sm:text-sm">
+          <form onSubmit={handleSearch} className="bg-slate-950 p-4 sm:p-5 rounded-3xl border-2 border-slate-800 space-y-3.5">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-white text-xs">Ingreso de Paciente:</span>
+              <span className="font-black text-white uppercase text-xs sm:text-sm tracking-wide">
+                Ingreso de Paciente:
+              </span>
               <button
                 type="button"
                 onClick={handleLoadDemo}
-                className="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-medium"
+                className="text-xs text-cyan-400 hover:text-cyan-300 underline font-black uppercase"
               >
-                Cargar Protocolo de Demostración
+                Cargar Demo
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 uppercase font-bold block">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-xs text-slate-300 uppercase font-black block">
                   N° de Protocolo:
                 </label>
                 <input
@@ -145,12 +148,12 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
                   value={protocolInput}
                   onChange={(e) => setProtocolInput(e.target.value)}
                   placeholder="Ej: LIB-2026-9024"
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-900 border-2 border-slate-700 text-white rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-cyan-400 font-mono"
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 uppercase font-bold block">
+              <div className="space-y-1.5">
+                <label className="text-xs text-slate-300 uppercase font-black block">
                   DNI del Paciente:
                 </label>
                 <input
@@ -159,7 +162,7 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
                   value={dniInput}
                   onChange={(e) => setDniInput(e.target.value)}
                   placeholder="Ej: 34.890.122"
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-slate-900 border-2 border-slate-700 text-white rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-cyan-400 font-mono"
                 />
               </div>
             </div>
@@ -167,88 +170,89 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
             <button
               type="submit"
               disabled={reportState === 'loading'}
-              className="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-md"
+              className="w-full py-3.5 bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs sm:text-sm uppercase tracking-wider rounded-2xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-95"
             >
-              <Search className="w-3.5 h-3.5" />
+              <Search className="w-4 h-4" />
               <span>{reportState === 'loading' ? 'Buscando protocolo...' : 'Consultar Informe de Resultados'}</span>
             </button>
           </form>
 
           {/* Report Viewer */}
           {reportState === 'found' && (
-            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-4 animate-in fade-in">
+            <div className="bg-slate-950 border-2 border-slate-800 rounded-3xl p-5 space-y-4 animate-in fade-in">
               {/* Report Header */}
-              <div className="border-b border-slate-800 pb-3 flex items-start justify-between">
+              <div className="border-b-2 border-slate-800 pb-3 flex items-start justify-between gap-2">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-extrabold text-white font-display">
+                    <span className="text-base font-black text-white font-display uppercase">
                       LABORATORIO SCHVARZSTEIN
                     </span>
-                    <span className="px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold rounded-md">
-                      Protocolo Validado
+                    <span className="px-2.5 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-black rounded-lg uppercase">
+                      Validado
                     </span>
                   </div>
-                  <p className="text-[10px] text-cyan-400 font-medium">
-                    Calle Sarmiento 902 · Paso de los Libres, Corrientes · Matrícula Bioquímica Prov. Ctes.
+                  <p className="text-xs text-cyan-400 font-bold mt-0.5">
+                    Calle Sarmiento 902 · Paso de los Libres, Corrientes
                   </p>
                 </div>
 
                 <button
-                  onClick={() => alert("Descargando informe oficial firmado digitalmente en formato PDF...")}
-                  className="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1"
+                  type="button"
+                  onClick={handleDownloadPdf}
+                  className="px-3 py-2 bg-slate-900 hover:bg-slate-800 border-2 border-slate-700 text-white text-xs font-black uppercase rounded-xl flex items-center gap-1.5 transition-all"
                 >
-                  <Download className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>PDF</span>
+                  <Download className={`w-4 h-4 ${isDownloading ? 'text-emerald-400 animate-bounce' : 'text-cyan-400'}`} />
+                  <span>{isDownloading ? 'Generando...' : 'PDF'}</span>
                 </button>
               </div>
 
               {/* Patient Meta */}
-              <div className="grid grid-cols-2 gap-2 text-[11px] bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+              <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm bg-slate-900 p-4 rounded-2xl border border-slate-800 font-bold">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Paciente:</span>
-                  <span className="font-bold text-white">GÓMEZ, MARTA BEATRIZ</span>
+                  <span className="text-slate-400 block text-xs uppercase font-extrabold">Paciente:</span>
+                  <span className="font-black text-white">GÓMEZ, MARTA BEATRIZ</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">DNI:</span>
+                  <span className="text-slate-400 block text-xs uppercase font-extrabold">DNI:</span>
                   <span className="font-mono text-white">34.890.122</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Protocolo:</span>
-                  <span className="font-mono text-cyan-300 font-semibold">{protocolInput || 'LIB-2026-9024'}</span>
+                  <span className="text-slate-400 block text-xs uppercase font-extrabold">Protocolo:</span>
+                  <span className="font-mono text-cyan-300">{protocolInput || 'LIB-2026-9024'}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Fecha de Extracción:</span>
-                  <span className="text-white">28/09/2026 - Sarmiento 902</span>
+                  <span className="text-slate-400 block text-xs uppercase font-extrabold">Fecha:</span>
+                  <span className="text-white">Sarmiento 902</span>
                 </div>
               </div>
 
               {/* Results Tables */}
               <div className="space-y-4">
                 {mockReportResults.map((cat, idx) => (
-                  <div key={idx} className="space-y-1.5">
-                    <h5 className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider bg-slate-900/90 px-2 py-1 rounded-md border border-slate-800">
+                  <div key={idx} className="space-y-2">
+                    <h5 className="text-xs font-black text-cyan-300 uppercase tracking-wider bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
                       {cat.category}
                     </h5>
 
                     <div className="overflow-x-auto no-scrollbar">
-                      <table className="w-full text-left text-xs">
+                      <table className="w-full text-left text-xs sm:text-sm">
                         <thead>
-                          <tr className="text-[10px] text-slate-500 border-b border-slate-800">
-                            <th className="py-1">Determinación</th>
-                            <th className="py-1 text-right">Resultado</th>
-                            <th className="py-1 text-left pl-2">Unidad</th>
-                            <th className="py-1 text-right">Valores Referencia</th>
+                          <tr className="text-xs font-black text-slate-400 border-b border-slate-800 uppercase">
+                            <th className="py-2">Determinación</th>
+                            <th className="py-2 text-right">Resultado</th>
+                            <th className="py-2 text-left pl-3">Unidad</th>
+                            <th className="py-2 text-right">Referencia</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-900">
                           {cat.rows.map((row, rIdx) => (
-                            <tr key={rIdx} className="hover:bg-slate-900/40">
-                              <td className="py-1.5 font-medium text-slate-200 text-[11px]">{row.parameter}</td>
-                              <td className="py-1.5 text-right font-bold text-white font-mono text-[11px]">
+                            <tr key={rIdx} className="hover:bg-slate-900/50">
+                              <td className="py-2 font-bold text-slate-100">{row.parameter}</td>
+                              <td className="py-2 text-right font-black text-white font-mono">
                                 {row.value}
                               </td>
-                              <td className="py-1.5 pl-2 text-[10px] text-slate-400 font-mono">{row.unit}</td>
-                              <td className="py-1.5 text-right text-[10px] text-slate-400 font-mono">{row.referenceInterval}</td>
+                              <td className="py-2 pl-3 text-xs text-slate-400 font-mono font-bold">{row.unit}</td>
+                              <td className="py-2 text-right text-xs text-slate-300 font-mono font-bold">{row.referenceInterval}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -259,12 +263,12 @@ export const ResultPortalModal: React.FC<ResultPortalModalProps> = ({
               </div>
 
               {/* Electronic Biochemist Signature Box */}
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                <div className="flex items-center gap-1.5 text-emerald-400">
-                  <ShieldCheck className="w-4 h-4" />
+              <div className="pt-3 border-t-2 border-slate-800 flex items-center justify-between text-xs font-bold text-slate-300">
+                <div className="flex items-center gap-2 text-emerald-400 font-black">
+                  <ShieldCheck className="w-5 h-5" />
                   <span>Validado electrónicamente por Bioquímico Director Técnico</span>
                 </div>
-                <span className="font-mono text-[10px] text-slate-500">Hash: 8A4F-C992</span>
+                <span className="font-mono text-xs text-slate-500">Hash: 8A4F-C992</span>
               </div>
             </div>
           )}

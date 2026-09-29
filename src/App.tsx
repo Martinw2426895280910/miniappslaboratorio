@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PhoneFrame } from './components/PhoneFrame';
+import { PhoneFrame, DeviceMode } from './components/PhoneFrame';
 import { TopAppBar } from './components/TopAppBar';
 import { BottomNavBar, ActiveScreen } from './components/BottomNavBar';
 import { Screen1Catalog } from './components/Screen1Catalog';
@@ -14,8 +14,8 @@ import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
 import { StudyProfile, LabArea } from './data/labData';
 
 export default function App() {
-  // Mobile device simulation state: iOS (iPhone), Android (Pixel), or fluid desktop
-  const [deviceType, setDeviceType] = useState<'ios' | 'android' | 'desktop'>('ios');
+  // Mobile device simulation state: Android or fluid desktop ONLY (iOS removed)
+  const [deviceType, setDeviceType] = useState<DeviceMode>('android');
   
   // 2-Screen application state
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>('catalog');
@@ -104,8 +104,6 @@ export default function App() {
         activeScreen={activeScreen}
         onScreenChange={(screen) => {
           setActiveScreen(screen);
-          // scroll to top when changing screens
-          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
       />
 

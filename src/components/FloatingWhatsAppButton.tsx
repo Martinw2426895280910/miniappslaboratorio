@@ -22,16 +22,16 @@ export const FloatingWhatsAppButton: React.FC<FloatingWhatsAppButtonProps> = ({
   return (
     <div 
       aria-label="Contacto rápido por WhatsApp"
-      className="sticky bottom-20 self-end mr-3 sm:mr-4 -mt-14 z-40 flex items-center gap-1.5 select-none pointer-events-auto"
+      className="sticky bottom-24 self-end mr-3 sm:mr-4 -mt-16 z-40 flex items-center gap-2 select-none pointer-events-auto"
     >
-      {/* Pill label button */}
+      {/* Pill label button with bold thick font */}
       <button
         type="button"
         onClick={handleClick}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/95 hover:bg-slate-800 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/40 shadow-xl backdrop-blur-md transition-all duration-200 active:scale-95 group"
+        className="flex items-center gap-2 px-3.5 py-2 bg-slate-900/98 hover:bg-slate-800 text-emerald-400 text-xs sm:text-sm font-black uppercase tracking-wider rounded-full border-2 border-emerald-500/60 shadow-2xl backdrop-blur-md transition-all duration-200 active:scale-95 group"
       >
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="tracking-tight text-[11px] text-white group-hover:text-emerald-300">
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="text-white group-hover:text-emerald-300">
           Contacto rápido
         </span>
       </button>
@@ -42,18 +42,17 @@ export const FloatingWhatsAppButton: React.FC<FloatingWhatsAppButtonProps> = ({
         onClick={handleClick}
         aria-label="Contacto rápido WhatsApp con Laboratorio Schvarzstein (+54 3772 636749)"
         title="Contacto rápido por WhatsApp (+54 3772 636749)"
-        className="relative w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-green-400 text-white flex items-center justify-center shadow-lg shadow-emerald-950/70 border-2 border-emerald-300/40 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="relative w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-green-400 text-white flex items-center justify-center shadow-2xl shadow-emerald-950/80 border-2 border-emerald-300/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         {/* Pulsing ring */}
-        <span className="absolute -inset-1 rounded-full bg-emerald-400/25 animate-ping pointer-events-none" />
+        <span className="absolute -inset-1 rounded-full bg-emerald-400/30 animate-ping pointer-events-none" />
 
         {/* WhatsApp Icon */}
-        <MessageCircle className="w-6 h-6 fill-current drop-shadow-sm" />
+        <MessageCircle className="w-7 h-7 fill-current drop-shadow-md" />
 
         {/* Online Status Green Indicator */}
-        <span className="absolute top-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-slate-950 rounded-full" />
+        <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-emerald-400 border-2 border-slate-950 rounded-full" />
       </button>
     </div>
   );
 };
-
